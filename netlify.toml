@@ -1,0 +1,5 @@
+# we need to tell it where the functions are living
+[build]
+command="npm run build"
+functions="functions/"
+publish="build"
