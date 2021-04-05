@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 // Basically adding data in app we will use the astrajs collection code here
 const { createClient } = require('@astrajs/collections');
 
@@ -90,10 +91,13 @@ exports.handler = async function (event, context) {
   // create a user subdocument
   // basically adding the data or you can call the post
   try {
+    for (let i = 0; i < data.length; i++) {
+      await posts.create(data[i].id.toString(), data[i]);
+    }
     // await posts.create('a post', {
     //   title: 'my first post',
     // });
-    await posts.create();
+
     return {
       statusCode: 200,
     };
