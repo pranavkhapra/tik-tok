@@ -14,7 +14,7 @@ function Home() {
   let descendingUsers;
   let topFiveFollowing;
   let topFiveNotFollowing;
-  console.log(userToToggle);
+  // console.log(userToToggle);
   // first we need to populate our data
   // bascially so that we dont need to visit the page to add data
   const addData = async () => {
@@ -29,11 +29,13 @@ function Home() {
   if (userToToggle) {
     const newValue = userToToggle.is_followed ? false : true;
     const data = { is_followed: newValue };
+    // this axios to put is used same as given in astra
     axios
       .put('/.netlify/functions/edit', { userId: userToToggle.id, data })
       .then((res) => res.json())
       .then((json) => console.log(json))
       .catch((err) => console.error(`error:${err}`))
+      // after we updated our data we want to reflect so refetching the data so that we can re-render
       .then(() => fetchData());
     setUserToToggle(null);
   }
@@ -86,7 +88,13 @@ function Home() {
                 <div className="break" />
                 {/* basically top 5 not following in the suggested accounts */}
                 {topFiveNotFollowing.map((notFollowingUser, index) => (
-                  <MiniCard key={index} user={notFollowingUser} />
+                  <MiniCard
+                    key={index}
+                    user={notFollowingUser}
+                    toggleFollow={(userToToggle) =>
+                      setUserToToggle(userToToggle)
+                    }
+                  />
                 ))}
               </div>
             </div>
