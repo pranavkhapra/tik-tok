@@ -1,9 +1,11 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-const Card = ({ user }) => (
+const Card = ({ user, toggleFollow }) => (
   <div className="card">
     <div className="break" />
     <div className="section">
@@ -24,7 +26,10 @@ const Card = ({ user }) => (
         </div>
       </div>
       {user.button_visible && (
-        <div className={user.is_followed ? 'followed-button' : 'follow-button'}>
+        <div
+          className={user.is_followed ? 'followed-button' : 'follow-button'}
+          onClick={() => toggleFollow(user)}
+        >
           {user.is_followed ? 'Following' : 'Follow'}
         </div>
       )}

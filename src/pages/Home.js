@@ -1,3 +1,6 @@
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import FollowersColumn from '../components/FollowersColumn';
@@ -7,9 +10,11 @@ import MiniCard from '../components/MiniCard.js';
 
 function Home() {
   const [users, setUsers] = useState(null);
+  const [userToToggle, setUserToToggle] = useState(null);
   let descendingUsers;
   let topFiveFollowing;
   let topFiveNotFollowing;
+  console.log(userToToggle);
   // first we need to populate our data
   // bascially so that we dont need to visit the page to add data
   const addData = async () => {
@@ -20,6 +25,18 @@ function Home() {
     // console.log(results.data);
     setUsers(results.data);
   };
+  // editing our data of the userToToggle basically new value of the Toggle
+  if (userToToggle) {
+    const newValue = userToToggle.is_followed ? false : true;
+    const data = { is_followed: newValue };
+    axios
+      .put('/.netlify/functions/edit', { userId: userToToggle.id, data })
+      .then((res) => res.json())
+      .then((json) => console.log(json))
+      .catch((err) => console.error(`error:${err}`))
+      .then(() => fetchData());
+    setUserToToggle(null);
+  }
   useEffect(() => {
     addData();
     fetchData();
@@ -55,7 +72,11 @@ function Home() {
           <FollowersColumn users={topFiveFollowing} />
           <div className="feed">
             {descendingUsers.map((descendingUser, index) => (
-              <Card key={index} user={descendingUser} />
+              <Card
+                key={index}
+                user={descendingUser}
+                toggleFollow={(userToToggle) => setUserToToggle(userToToggle)}
+              />
             ))}
           </div>
           <div className="suggested-box">
